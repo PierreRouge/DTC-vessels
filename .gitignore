@@ -105,3 +105,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+#data
+data/2018LA_Seg_Training Set/
