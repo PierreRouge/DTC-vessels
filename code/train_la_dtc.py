@@ -46,7 +46,7 @@ parser.add_argument('--labelnum', type=int,  default=42, help='random seed')
 parser.add_argument('--seed', type=int,  default=1337, help='random seed')
 parser.add_argument('--consistency_weight', type=float,  default=0.1,
                     help='balance factor to control supervised loss and consistency loss')
-parser.add_argument('--gpu', type=str,  default='1', help='GPU to use')
+parser.add_argument('--gpu', type=str,  default='0', help='GPU to use')
 parser.add_argument('--beta', type=float,  default=0.3,
                     help='balance factor to control regional and sdm loss')
 parser.add_argument('--gamma', type=float,  default=0.5,
