@@ -29,7 +29,7 @@ if not os.path.exists(test_save_path):
 print(test_save_path)
 with open(FLAGS.root_path + '/test.list', 'r') as f:
     image_list = f.readlines()
-image_list = [FLAGS.root_path + "/" + item.replace('\n', '') + "/mri_norm2.h5" for item in
+image_list = [FLAGS.root_path + "/" + item.replace('\n', '') + "/mra_norm.h5" for item in
               image_list]
 
 
