@@ -8,6 +8,8 @@ import logging
 import time
 import random
 import numpy as np
+import nibabel as nib
+
 
 import torch
 import torch.optim as optim
@@ -176,10 +178,17 @@ if __name__ == "__main__":
             outputs_tanh, outputs = model(volume_batch)
             outputs_soft = torch.sigmoid(outputs)
 
+            image_name = sampled_batch['image_name']
             # calculate the loss
             with torch.no_grad():
+                
                 gt_dis = compute_sdf(label_batch[:].cpu(
                 ).numpy(), outputs[:labeled_bs, 0, ...].shape)
+                
+                for i in range(len(gt_dis)):
+                    path = '../sdf/' + image_name[i] + '.nii.gz'
+                    img = nib.Nifti1Image(gt_dis[i], affine=np.eye(4))
+                    nib.save(img, path)
                 gt_dis = torch.from_numpy(gt_dis).float().cuda()
             loss_sdf = mse_loss(outputs_tanh[:labeled_bs, 0, ...], gt_dis)
             loss_seg = ce_loss(
@@ -187,6 +196,21 @@ if __name__ == "__main__":
             loss_seg_dice = losses.dice_loss(
                 outputs_soft[:labeled_bs, 0, :, :, :], label_batch[:labeled_bs] == 1)
             dis_to_mask = torch.sigmoid(-1500*outputs_tanh)
+            
+            for i in range(len(dis_to_mask)):
+                path = '../seg_from_sdf/' + image_name[i] + '.nii.gz'
+                img = nib.Nifti1Image(dis_to_mask[i][0].detach().cpu().numpy(), affine=np.eye(4))
+                nib.save(img, path)
+                
+            for i in range(len(label_batch)):
+                path = '../gt/' + image_name[i] + '.nii.gz'
+                img = nib.Nifti1Image(label_batch[i].cpu().numpy().astype(float), affine=np.eye(4))
+                nib.save(img, path)
+                
+            for i in range(len(outputs_soft)):
+                path = '../seg/' + image_name[i] + '.nii.gz'
+                img = nib.Nifti1Image(outputs_soft[i].detach().cpu().numpy(), affine=np.eye(4))
+                nib.save(img, path)
 
             consistency_loss = torch.mean((dis_to_mask - outputs_soft) ** 2)
             supervised_loss = loss_seg_dice + args.beta * loss_sdf
