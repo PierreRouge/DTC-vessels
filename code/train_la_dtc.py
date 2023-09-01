@@ -209,7 +209,7 @@ if __name__ == "__main__":
                 
             for i in range(len(outputs_soft)):
                 path = '../seg/' + image_name[i] + '.nii.gz'
-                img = nib.Nifti1Image(outputs_soft[i].detach().cpu().numpy(), affine=np.eye(4))
+                img = nib.Nifti1Image(outputs_soft[i][0].detach().cpu().numpy(), affine=np.eye(4))
                 nib.save(img, path)
 
             consistency_loss = torch.mean((dis_to_mask - outputs_soft) ** 2)
