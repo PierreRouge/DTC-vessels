@@ -152,13 +152,6 @@ if __name__ == "__main__":
     ce_loss = BCEWithLogitsLoss()
     mse_loss = MSELoss()
 
-    if args.consistency_type == 'mse':
-        consistency_criterion = losses.softmax_mse_loss
-    elif args.consistency_type == 'kl':
-        consistency_criterion = losses.softmax_kl_loss
-    else:
-        assert False, args.consistency_type
-
     writer = SummaryWriter(snapshot_path+'/log')
     logging.info("{} itertations per epoch".format(len(trainloader)))
 
@@ -211,8 +204,13 @@ if __name__ == "__main__":
                 path = '../seg/' + image_name[i] + '.nii.gz'
                 img = nib.Nifti1Image(outputs_soft[i][0].detach().cpu().numpy(), affine=np.eye(4))
                 nib.save(img, path)
-
-            consistency_loss = torch.mean((dis_to_mask - outputs_soft) ** 2)
+                
+            if args.consistency_type == 'mse':
+                consistency_loss = torch.mean((dis_to_mask - outputs_soft) ** 2)
+            elif args.consistency_type == 'dice':
+                consistency_loss = losses.dice_loss1(dis_to_mask, outputs_soft)
+          
+                
             supervised_loss = loss_seg_dice + args.beta * loss_sdf
             consistency_weight = get_current_consistency_weight(iter_num//150)
 
