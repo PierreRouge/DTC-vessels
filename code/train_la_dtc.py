@@ -178,10 +178,11 @@ if __name__ == "__main__":
                 gt_dis = compute_sdf(label_batch[:].cpu(
                 ).numpy(), outputs[:labeled_bs, 0, ...].shape)
                 
-                for i in range(len(gt_dis)):
-                    path = '../sdf/' + image_name[i] + '.nii.gz'
-                    img = nib.Nifti1Image(gt_dis[i], affine=np.eye(4))
-                    nib.save(img, path)
+                # for i in range(len(gt_dis)):
+                #     path = '../sdf/' + image_name[i] + '.nii.gz'
+                #     img = nib.Nifti1Image(gt_dis[i], affine=np.eye(4))
+                #     nib.save(img, path)
+                    
                 gt_dis = torch.from_numpy(gt_dis).float().cuda()
             loss_sdf = mse_loss(outputs_tanh[:labeled_bs, 0, ...], gt_dis)
             loss_seg = ce_loss(
@@ -190,20 +191,20 @@ if __name__ == "__main__":
                 outputs_soft[:labeled_bs, 0, :, :, :], label_batch[:labeled_bs] == 1)
             dis_to_mask = torch.sigmoid(-1500*outputs_tanh)
             
-            for i in range(len(dis_to_mask)):
-                path = '../seg_from_sdf/' + image_name[i] + '.nii.gz'
-                img = nib.Nifti1Image(dis_to_mask[i][0].detach().cpu().numpy(), affine=np.eye(4))
-                nib.save(img, path)
+            # for i in range(len(dis_to_mask)):
+            #     path = '../seg_from_sdf/' + image_name[i] + '.nii.gz'
+            #     img = nib.Nifti1Image(dis_to_mask[i][0].detach().cpu().numpy(), affine=np.eye(4))
+            #     nib.save(img, path)
                 
-            for i in range(len(label_batch)):
-                path = '../gt/' + image_name[i] + '.nii.gz'
-                img = nib.Nifti1Image(label_batch[i].cpu().numpy().astype(float), affine=np.eye(4))
-                nib.save(img, path)
+            # for i in range(len(label_batch)):
+            #     path = '../gt/' + image_name[i] + '.nii.gz'
+            #     img = nib.Nifti1Image(label_batch[i].cpu().numpy().astype(float), affine=np.eye(4))
+            #     nib.save(img, path)
                 
-            for i in range(len(outputs_soft)):
-                path = '../seg/' + image_name[i] + '.nii.gz'
-                img = nib.Nifti1Image(outputs_soft[i][0].detach().cpu().numpy(), affine=np.eye(4))
-                nib.save(img, path)
+            # for i in range(len(outputs_soft)):
+            #     path = '../seg/' + image_name[i] + '.nii.gz'
+            #     img = nib.Nifti1Image(outputs_soft[i][0].detach().cpu().numpy(), affine=np.eye(4))
+            #     nib.save(img, path)
                 
             if args.consistency_type == 'mse':
                 consistency_loss = torch.mean((dis_to_mask - outputs_soft) ** 2)
