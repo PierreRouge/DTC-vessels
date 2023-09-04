@@ -213,7 +213,7 @@ if __name__ == "__main__":
           
                 
             supervised_loss = loss_seg_dice + args.beta * loss_sdf
-            consistency_weight = get_current_consistency_weight(iter_num//150)
+            consistency_weight = get_current_consistency_weight(iter_num//21) #21 because there are 21 iterations per epoch
 
             loss = supervised_loss + consistency_weight * consistency_loss
 
