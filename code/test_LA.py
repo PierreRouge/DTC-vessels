@@ -6,7 +6,7 @@ from test_util import test_all_case
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='../data/2018LA_Seg_Training Set', help='Name of Experiment')
+                    default='../../data/IXI_Bullitt_training_set', help='Name of Experiment')
 parser.add_argument('--model', type=str,
                     default='DTC_16labels', help='model_name')
 parser.add_argument('--gpu', type=str,  default='0', help='GPU to use')

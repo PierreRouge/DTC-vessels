@@ -80,7 +80,7 @@ def sensitivity_specificity_precision(y_true, y_pred):
     return sens, spec, prec
 
 
-dir_inputs = '../model/DTC_010_42labels_beta_0.3/test/*_pred.nii.gz'
+dir_inputs = '../model/DTC_unet_dice_cons=0.001_42labels_beta_0.3/test/*_pred.nii.gz'
 
 listt = glob(dir_inputs)
 

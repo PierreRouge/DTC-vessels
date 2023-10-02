@@ -29,7 +29,7 @@ from utils.util import compute_sdf
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='../data/2018LA_Seg_Training Set', help='Name of Experiment')
+                    default='../../data/IXI_Bullitt_training_set', help='Name of Experiment')
 parser.add_argument('--exp', type=str,
                     default='LA/DTC_with_consis_weight', help='model_name')
 parser.add_argument('--max_iterations', type=int,
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
     labelnum = args.labelnum    # default 42
     labeled_idxs = list(range(labelnum))
-    unlabeled_idxs = list(range(labelnum, 76))
+    unlabeled_idxs = list(range(labelnum, 350))
     batch_sampler = TwoStreamBatchSampler(
         labeled_idxs, unlabeled_idxs, batch_size, batch_size-labeled_bs)
 
