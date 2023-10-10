@@ -88,7 +88,7 @@ torch.manual_seed(args.seed)
 torch.cuda.manual_seed(args.seed)
 
 num_classes = 2
-patch_size = (128, 128, 128)
+patch_size = (192, 192, 64)
 
 
 def get_current_consistency_weight(epoch):
