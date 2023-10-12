@@ -108,3 +108,6 @@ venv.bak/
 
 #data
 data/2018LA_Seg_Training Set/
+
+#model
+model/
