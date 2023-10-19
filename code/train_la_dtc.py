@@ -45,6 +45,8 @@ parser.add_argument('--D_lr', type=float,  default=1e-4,
 parser.add_argument('--deterministic', type=int,  default=1,
                     help='whether use deterministic training')
 parser.add_argument('--labelnum', type=int,  default=42, help='random seed')
+parser.add_argument('--maxsamples', type=int,  default=350, help='Number of total samples')
+parser.add_argument('--patch_size', nargs='+', type=int, default=[128, 128, 128], help='Patch _size')
 parser.add_argument('--seed', type=int,  default=1337, help='random seed')
 parser.add_argument('--consistency_weight', type=float,  default=0.1,
                     help='balance factor to control supervised loss and consistency loss')
@@ -88,7 +90,7 @@ torch.manual_seed(args.seed)
 torch.cuda.manual_seed(args.seed)
 
 num_classes = 2
-patch_size = (128, 128, 96)
+patch_size = tuple(args.patch_size)
 
 
 def get_current_consistency_weight(epoch):
@@ -136,7 +138,7 @@ if __name__ == "__main__":
 
     labelnum = args.labelnum    # default 42
     labeled_idxs = list(range(labelnum))
-    unlabeled_idxs = list(range(labelnum, 350))
+    unlabeled_idxs = list(range(labelnum, args.maxsamples))
     batch_sampler = TwoStreamBatchSampler(
         labeled_idxs, unlabeled_idxs, batch_size, batch_size-labeled_bs)
 
