@@ -19,8 +19,8 @@ from skimage.morphology import remove_small_objects
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dir_inputs', type=str, default='../model/prediction/UA-MT_lr=0.001_cons=0.001_post/*_pred.nii.gz', help='Path')
-parser.add_argument('--postprocessing', type=bool,  default=True, help='prostprocessing or not')
+parser.add_argument('--dir_inputs', type=str, default='../../../Thèse_Rougé_Pierre/res_semi_supervised/DTC/DTC_Bullitt_18labels_beta_0.3/test', help='Path')
+parser.add_argument('--postprocessing', type=bool,  default=False, help='prostprocessing or not')
 
 args = parser.parse_args()
 
@@ -135,6 +135,23 @@ for item in tqdm(listt):
     print()
     print()
     print(f"Dice:{dice}")
+    
+dict_csv = {'Patient': "Mean",
+            'Dice': np.mean(dice_list),
+            'clDice': np.mean(cldice_list),
+            'Precision': np.mean(prec_list),
+            'Sensitivity': np.mean(sens_list)}
+
+writer.writerow(dict_csv)
+
+dict_csv = {'Patient': "Std",
+            'Dice': np.std(dice_list),
+            'clDice': np.std(cldice_list),
+            'Precision': np.std(prec_list),
+            'Sensitivity': np.std(sens_list)}
+
+writer.writerow(dict_csv)
+   
    
 print()
 print('Moyenne Dice')
